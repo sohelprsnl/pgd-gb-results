@@ -585,6 +585,58 @@
     .cgpa{padding:6px;}
     .credit{padding:4px 10px;}
   }
+
+  /* Print header. The logo bar is replaced by the institute name set in text, so the
+     sheet still identifies itself if a print route drops images. The screen keeps the
+     logos. The info grid's Institute row is dropped on paper because the header now
+     carries it. Ranking print (body.rk-mode) is left exactly as it was. */
+  @media print{
+    body:not(.rk-mode) .logobar{display:none!important;}
+    body:not(.rk-mode) header{display:block!important; text-align:center; padding:0 0 11px; margin:0;
+           border-bottom:2.5px solid var(--green);}
+    body:not(.rk-mode) header h1{font-size:1.18rem!important; margin:0!important; color:var(--green)!important; letter-spacing:.2px;}
+    body:not(.rk-mode) header p{font-size:.7rem!important; margin:4px 0 0!important; color:#555!important;}
+    body:not(.rk-mode) header .themebar{display:none!important;}
+    body:not(.rk-mode) .igrid .full{display:none!important;}
+    body:not(.rk-mode) .card{margin-top:26px!important;}
+  }
+
+  /* Ranking print: same text letterhead as the marksheet, on both pages. Page 2 reuses
+     the cloned logo bar element, with its images hidden and the name set in text. */
+  @media print{
+    body.rk-mode .logobar{display:none!important;}
+    body.rk-mode header{display:block!important; text-align:center; padding:0 0 9px; margin:0;
+          border-bottom:2.5px solid var(--green);}
+    body.rk-mode header h1{font-size:1.1rem!important; margin:0!important; color:var(--green)!important; letter-spacing:.2px;}
+    body.rk-mode header p{font-size:.66rem!important; margin:3px 0 0!important; color:#555!important;}
+    body.rk-mode header .themebar{display:none!important;}
+    .p2logo{display:block!important; text-align:center; border-bottom:2px solid var(--green);
+            padding:0 6px 2.5mm!important;}
+    .p2logo img,.p2logo .lg-left{display:none!important;}
+    .p2logo::before{content:"Institute of Business Administration, University of Dhaka";
+            display:block; color:var(--green); font-weight:700; font-size:1.02rem; letter-spacing:.2px;}
+    .p2logo::after{content:"Post Graduate Diploma in Garment Business (PGD-GB) \2022  Batch SICIP-B11/2025";
+            display:block; color:#555; font-size:.62rem; margin-top:2px;}
+  }
+
+  /* The screen header is white text on a green gradient. In print it is green text on
+     white, so the gradient and text shadows must go, or the name is unreadable whenever
+     the browser prints background graphics. */
+  @media print{
+    header{background:none!important; background-image:none!important; box-shadow:none!important; animation:none!important;}
+    header h1,header p{text-shadow:none!important;}
+  }
+
+  /* The page-2 letterhead is a clone of the logo bar, so it carries both classes. The
+     rule that hides the logo bar in print outranked it and removed it from page 2. */
+  @media print{
+    body.rk-mode .logobar.p2logo{display:block!important; text-align:center;
+            border-bottom:2px solid var(--green); padding:0 6px 2.5mm!important;}
+  }
+  /* Rank pill: larger, since it is the line people look for. */
+  .rkpill{font-size:1.06rem; padding:4px 16px;}
+  @media(max-width:600px){ .rkpill{font-size:.98rem; padding:4px 14px;} }
+  @media print{ .rkpill{font-size:.88rem!important; padding:1px 11px!important;} }
 </style>
 </head>
 <body>
@@ -696,6 +748,7 @@
         <div class="credit">Compiled and built by Md. Sohel Rana &nbsp;&bull;&nbsp; WhatsApp: <a href="https://wa.me/8801722308080" target="_blank" rel="noopener">@sohelprsnl</a> &nbsp;&bull;&nbsp; Portfolio: <a href="https://sohelprsnl.com" target="_blank" rel="noopener">sohelprsnl.com</a> &nbsp;&bull;&nbsp; PGD-GB Archive: <a href="https://sohelprsnl.com/pgd-gb-archive/" target="_blank" rel="noopener">sohelprsnl.com/pgd-gb-archive</a></div>
     <div class="toolbar">
       <button class="sec" type="button" onclick="reset_()">New Search</button>
+      <button class="sec" type="button" onclick="saveJPG(this)">Save as JPG</button>
       <button type="button" onclick="window.print()">Print / Save PDF</button>
     </div>
   </div>
@@ -872,6 +925,7 @@ function totalOf(courses){
 }
 
 function show(st){
+  window.CUR = st;
   document.title = 'IBA-DU PGD-GB Batch 11 \u2014 Result-ID ' + st.roll;
   document.getElementById('rName').textContent = st.name;
   document.getElementById('rRoll').textContent = st.roll;
@@ -935,6 +989,238 @@ function show(st){
   const tot = document.getElementById('rTot');
   if(tot) countUp(tot, totalMk, dec);
   if(res.scrollIntoView) res.scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth'});
+}
+
+
+/* ---- Save as JPG -------------------------------------------------------
+   Draws the marksheet on a canvas and downloads it as a JPEG. Done by hand
+   rather than with a screenshot library so the page stays self-contained and
+   the output is the same on every browser. A4 proportions at 150 dpi.      */
+function saveJPG(btn){
+  var st = window.CUR;
+  if(!st) return;
+  var old = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'Preparing…'; }
+  var img = new Image();
+  img.onload  = function(){ jpgDraw(st, img, btn, old); };
+  img.onerror = function(){ jpgDraw(st, null, btn, old); };
+  img.src = st.photo || NOPHOTO;
+}
+
+function jpgRR(x, rx, ry, w, h, r){
+  x.beginPath();
+  x.moveTo(rx+r, ry);
+  x.arcTo(rx+w, ry,   rx+w, ry+h, r);
+  x.arcTo(rx+w, ry+h, rx,   ry+h, r);
+  x.arcTo(rx,   ry+h, rx,   ry,   r);
+  x.arcTo(rx,   ry,   rx+w, ry,   r);
+  x.closePath();
+}
+
+function jpgDraw(st, photo, btn, old){
+  var cs = getComputedStyle(document.documentElement);
+  function V(n, d){ var v = (cs.getPropertyValue(n)||'').trim(); return v || d; }
+  var GREEN = V('--green',  '#14683c'),
+      GREEN2= V('--green2', '#1e8a4f'),
+      LIGHT = V('--light',  '#eaf5ed'),
+      BORD  = V('--border', '#d9e2dc'),
+      MUTE  = V('--muted',  '#6b7280');
+
+  var W = 1240, H = 1754, M = 64, CW = W - M*2;
+  var c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  var x = c.getContext('2d');
+  x.textBaseline = 'alphabetic';
+  x.fillStyle = '#fff'; x.fillRect(0, 0, W, H);
+
+  function F(sz, w){ return (w ? w+' ' : '') + sz + "px 'Segoe UI',Roboto,Helvetica,Arial,sans-serif"; }
+  function T(t, px, py, f, col, align){
+    x.font = f; x.fillStyle = col; x.textAlign = align || 'left';
+    x.fillText(String(t), px, py); x.textAlign = 'left';
+  }
+
+  /* letterhead */
+  var y = M + 32;
+  T('Institute of Business Administration, University of Dhaka', W/2, y, F(31,'bold'), GREEN, 'center');
+  y += 27;
+  T('Post Graduate Diploma in Garment Business (PGD-GB)   •   Batch: SICIP-B11/2025',
+    W/2, y, F(17), '#555', 'center');
+  y += 16;
+  x.fillStyle = GREEN; x.fillRect(M, y, CW, 3);
+  y += 34;
+
+  /* card */
+  var cardTop = y;
+  var isF = (st.courses||[]).some(function(r){ return r && r.g && String(r.g).trim().toUpperCase()==='F'; });
+
+  /* card header */
+  var hH = 48;
+  x.fillStyle = '#fff'; x.fillRect(M, y, CW, hH);
+  T('Transcript / Marksheet (Unofficial)', M+18, y+32, F(21,'bold'), GREEN);
+  var chip = isF ? 'RESULT PENDING' : 'COMPLETE';
+  x.font = F(13,'bold');
+  var cwid = x.measureText(chip).width + 26;
+  x.strokeStyle = isF ? '#c98a00' : GREEN2; x.lineWidth = 1.5;
+  jpgRR(x, M+CW-18-cwid, y+13, cwid, 24, 12); x.stroke();
+  T(chip, M+CW-18-cwid/2, y+30, F(13,'bold'), isF ? '#8a5b00' : GREEN2, 'center');
+  y += hH;
+  x.strokeStyle = BORD; x.lineWidth = 1;
+  x.beginPath(); x.moveTo(M, y+.5); x.lineTo(M+CW, y+.5); x.stroke();
+
+  /* info block */
+  var iTop = y, phW = 150, phH = 180, iPad = 18;
+  var colX = [M+iPad, M+iPad+440];
+  var fields = [['Name of the Student', st.name], ['Roll No', st.roll],
+                ['Batch', 'SICIP-B11/2025'],
+                ['Program', 'Post Graduate Diploma in Garment Business (PGD-GB)']];
+  var ry = y + 30;
+  for(var i=0;i<4;i++){
+    var cx = colX[i%2], ly = ry + Math.floor(i/2)*66;
+    T(fields[i][0], cx, ly, F(14), MUTE);
+    x.font = F(20,'bold'); x.fillStyle = '#111';
+    var words = String(fields[i][1]).split(' '), line = '', lines = [], maxw = 400;
+    for(var w2=0; w2<words.length; w2++){
+      var test = line ? line+' '+words[w2] : words[w2];
+      if(x.measureText(test).width > maxw && line){ lines.push(line); line = words[w2]; }
+      else line = test;
+    }
+    lines.push(line);
+    for(var l=0; l<lines.length && l<2; l++) x.fillText(lines[l], cx, ly + 25 + l*23);
+  }
+  /* photo */
+  var px0 = M+CW-iPad-phW, py0 = y+18;
+  if(photo){
+    x.save(); jpgRR(x, px0, py0, phW, phH, 6); x.clip();
+    var ar = photo.width/photo.height, box = phW/phH, sw, sh, sx, sy;
+    if(ar > box){ sh = photo.height; sw = sh*box; sx = (photo.width-sw)/2; sy = 0; }
+    else { sw = photo.width; sh = sw/box; sx = 0; sy = (photo.height-sh)/2; }
+    x.drawImage(photo, sx, sy, sw, sh, px0, py0, phW, phH);
+    x.restore();
+  } else { x.fillStyle = LIGHT; jpgRR(x, px0, py0, phW, phH, 6); x.fill(); }
+  x.strokeStyle = GREEN2; x.lineWidth = 2; jpgRR(x, px0, py0, phW, phH, 6); x.stroke();
+  y = Math.max(ry + 2*66 + 6, py0 + phH + 18);
+
+  /* table */
+  var cols = [520, 110, 210, 120, 140];
+  var cx0 = [M]; for(var k=0;k<cols.length;k++) cx0.push(cx0[k]+cols[k]);
+  var hdr = ['Course','Credit','Marks','Grade','Grade Point'];
+  var rowH = 40;
+  x.fillStyle = LIGHT; x.fillRect(M, y, CW, 42);
+  for(var k2=0;k2<hdr.length;k2++){
+    var centre = k2 > 0;
+    T(hdr[k2], centre ? cx0[k2]+cols[k2]/2 : cx0[k2]+14, y+27, F(15,'bold'), GREEN, centre?'center':'left');
+  }
+  y += 42;
+  x.strokeStyle = BORD; x.lineWidth = 1;
+
+  var mods = ['One','Two','Three'];
+  mods.forEach(function(mod){
+    var idxs = [];
+    DATA.meta.courses.forEach(function(cc, ii){ if(cc.module === mod) idxs.push([cc, ii]); });
+    if(!idxs.length) return;
+    x.fillStyle = '#f5faf6'; x.fillRect(M, y, CW, rowH);
+    T('Module '+mod, M+14, y+26, F(17,'bold'), GREEN);
+    x.beginPath(); x.moveTo(M, y+rowH+.5); x.lineTo(M+CW, y+rowH+.5); x.stroke();
+    y += rowH;
+    idxs.forEach(function(pair){
+      var cc = pair[0], r = st.courses[pair[1]], done = r && r.g != null;
+      T(cc.code+': '+cc.title, M+14, y+26, F(16), '#1a1a1a');
+      T(cc.credit, cx0[1]+cols[1]/2, y+26, F(16), '#1a1a1a', 'center');
+      T(done && r.m != null ? r.m : (done ? '—' : 'Pending'),
+        cx0[2]+cols[2]/2, y+26, F(16), done ? '#1a1a1a' : MUTE, 'center');
+      T(done ? r.g : 'Pending', cx0[3]+cols[3]/2, y+26, F(16,'600'), done ? '#1a1a1a' : MUTE, 'center');
+      T(done && r.p != null ? Number(r.p).toFixed(2) : '—',
+        cx0[4]+cols[4]/2, y+26, F(16), done ? '#1a1a1a' : MUTE, 'center');
+      x.beginPath(); x.moveTo(M, y+rowH+.5); x.lineTo(M+CW, y+rowH+.5); x.stroke();
+      y += rowH;
+    });
+  });
+
+  /* total row */
+  var totCr = DATA.meta.courses.reduce(function(a, cc){ return a + cc.credit; }, 0);
+  var tt = totalOf(st.courses);
+  x.fillStyle = '#f5faf6'; x.fillRect(M, y, CW, 54);
+  T('Total Credit of the Program', M+14, y+33, F(18,'bold'), '#111');
+  T(totCr, cx0[1]+cols[1]/2, y+33, F(18,'bold'), '#111', 'center');
+  T(tt.graded ? tt.total : '—', cx0[2]+cols[2]/2, y+28, F(18,'bold'), '#111', 'center');
+  if(tt.graded) T(tt.done+' of '+st.courses.length+' courses completed',
+                  cx0[2]+cols[2]/2, y+45, F(12), MUTE, 'center');
+  y += 54;
+
+  /* card outline */
+  x.strokeStyle = BORD; x.lineWidth = 1.5;
+  x.strokeRect(M+.5, cardTop+.5, CW-1, y-cardTop-1);
+
+  /* CGPA band */
+  y += 20;
+  var bH = st.rank ? 118 : 86;
+  x.fillStyle = LIGHT; x.fillRect(M, y, CW, bH);
+  x.fillStyle = GREEN; x.fillRect(M, y, CW, 3);
+  T('CGPA (completed courses)', W/2, y+28, F(17,'bold'), '#1a1a1a', 'center');
+  T(st.cgpa != null ? Number(st.cgpa).toFixed(2) : '—', W/2, y+66, F(34,'bold'), '#111', 'center');
+  if(st.rank && st.of){
+    var rtxt = 'Rank '+st.rank+' of '+st.of;
+    x.font = F(19,'bold');
+    var rw = x.measureText(rtxt).width + 40;
+    x.fillStyle = '#fff'; jpgRR(x, W/2-rw/2, y+78, rw, 32, 16); x.fill();
+    x.strokeStyle = BORD; x.lineWidth = 1; jpgRR(x, W/2-rw/2, y+78, rw, 32, 16); x.stroke();
+    T(rtxt, W/2, y+100, F(19,'bold'), GREEN, 'center');
+  }
+  y += bH + 6;
+  T(isF ? 'One course result will be published later. This marksheet, CGPA and rank will change.'
+        : 'Programme complete. All 10 courses published.',
+    W/2, y+16, F(13), isF ? '#8a3b00' : MUTE, 'center');
+  y += 34;
+
+  /* credit line */
+  T('Compiled and built by Md. Sohel Rana   •   WhatsApp: +8801722308080   •   '
+    + 'Portfolio: sohelprsnl.com   •   PGD-GB Archive: sohelprsnl.com/pgd-gb-archive',
+    W/2, y+14, F(13), MUTE, 'center');
+  y += 36;
+
+  /* disclaimer */
+  x.fillStyle = '#fffaf2'; x.fillRect(M, y, CW, 74);
+  x.fillStyle = '#e8a33d'; x.fillRect(M, y, 4, 74);
+  T('DISCLAIMER', M+18, y+24, F(13,'bold'), '#8a4b00');
+  T('This is an unofficial student-made website and is not affiliated with or maintained by IBA-DU or SICIP.',
+    M+18, y+45, F(13), '#6b6b6b');
+  T('In the event of any discrepancy, the official records of the IBA Programme Office shall prevail.',
+    M+18, y+63, F(13), '#6b6b6b');
+  y += 92;
+  T('PGD-GB Result Checker   ·   Batch SICIP-B11/2025', W/2, y, F(13), '#9e9e9e', 'center');
+  T('© 2025–2026 Md. Sohel Rana   ·   Site and code by the author. Results belong to IBA-DU.',
+    W/2, y+19, F(13), '#9e9e9e', 'center');
+
+  /* trim the unused bottom so the image is not a tall sheet of white */
+  var out = c;
+  var endY = Math.min(H, Math.round(y) + M);
+  if(endY < H - 10){
+    out = document.createElement('canvas');
+    out.width = W; out.height = endY;
+    var ox = out.getContext('2d');
+    ox.fillStyle = '#fff'; ox.fillRect(0, 0, W, endY);
+    ox.drawImage(c, 0, 0);
+  }
+
+  /* download */
+  var name = 'PGD-GB-Marksheet-' + st.roll + '.jpg';
+  function done(){ if(btn){ btn.disabled = false; btn.textContent = old; } }
+  try{
+    out.toBlob(function(blob){
+      if(!blob){ done(); return; }
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+      done();
+    }, 'image/jpeg', 0.92);
+  }catch(e){
+    var a2 = document.createElement('a');
+    a2.href = out.toDataURL('image/jpeg', 0.92); a2.download = name;
+    document.body.appendChild(a2); a2.click(); a2.remove();
+    done();
+  }
 }
 
 function reset_(){

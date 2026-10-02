@@ -667,6 +667,86 @@
     body:not(.rk-mode) .photo{width:100px!important; height:120px!important;}
     body:not(.rk-mode) .card{margin-top:18px!important;}
   }
+  /* Ranking print, brought in line with the marksheet sheet: SICIP letterhead on both
+     pages, larger podium photographs and type so page 1 fills A4, page 2 list a little
+     larger, credit without the mobile number, two-line disclaimer, no footer lines. */
+  @media print{
+    body.rk-mode header p{display:none!important;}
+    body.rk-mode header p.p-sicip{display:block!important; font-size:.9rem!important; margin:4px 0 0!important; color:#555!important;}
+    body.rk-mode header h1{font-size:1.4rem!important;}
+    .p2logo::after{content:"Skills for Industry Competitiveness and Innovation Program (SICIP)"; font-size:.8rem;}
+    .p2logo::before{font-size:1.2rem;}
+    /* page 1 */
+    #rankView .rk-hero{padding:3mm 5mm!important; margin-top:3.5mm!important;}
+    #rankView .rk-hero h2{font-size:1.55rem!important;}
+    #rankView .rk-sub{font-size:1rem!important;}
+    #rankView .rk-note2{font-size:.82rem!important;}
+    #rankView .card-h{font-size:1.1rem!important; padding:2.6mm 4mm!important;}
+    #rankView .rk-hn{font-size:.82rem!important;}
+    #rankView .podium{padding:5mm 5mm 4.5mm!important; gap:5mm!important;}
+    #rankView .pd{padding:4.5mm 2.5mm!important;}
+    #rankView .pd.p1{padding:5.5mm 2.5mm!important;}
+    #rankView .pd .medal{margin:0 0 3mm!important; width:10.5mm!important; height:10.5mm!important; font-size:.84rem!important;}
+    #rankView .p1 .medal{width:12.5mm!important; height:12.5mm!important; font-size:.96rem!important;}
+    #rankView .pd img{margin:0 auto 3mm!important; width:32mm!important; height:38.5mm!important;}
+    #rankView .p1 img{width:38mm!important; height:45.5mm!important;}
+    #rankView .pd-n{font-size:1.22rem!important;} #rankView .p1 .pd-n{font-size:1.38rem!important;}
+    #rankView .pd-r{font-size:.86rem!important; margin-top:1mm!important;}
+    #rankView .pd-t{margin-top:2.5mm!important; font-size:.86rem!important; padding:3px 11px!important;}
+    #rankView .pd-c{margin-top:2.5mm!important; font-size:2rem!important;}
+    #rankView .p1 .pd-c{font-size:2.5rem!important;}
+    #rankView .pd-l{font-size:.74rem!important; margin-top:1.5mm!important;}
+    #rankView .st{padding:3mm 4mm!important;}
+    #rankView .st span{font-size:.7rem!important; letter-spacing:.3px!important;}
+    #rankView .st b{font-size:1.55rem!important; margin-top:1mm!important;}
+    #rankView .st b.nm{font-size:1.15rem!important;}
+    #rankView .st em{font-size:.8rem!important; margin-top:1mm!important;}
+    #rankView .bands{padding:3mm 4mm!important; font-size:.88rem!important;}
+    #rankView .bands-t{font-size:.78rem!important; margin-bottom:2.5mm!important;}
+    #rankView .bbar{height:18px!important;}
+    #rankView .rk-pmethod{font-size:.76rem!important; padding:2.6mm 4mm!important;}
+    /* page 2 */
+    .rk-phead{font-size:1.08rem!important; padding:2.2mm 4mm!important;}
+    .rk-pdate{font-size:.78rem!important;}
+    .pl{padding:.4mm 2.6mm .4mm 1.8mm!important; gap:2.4mm!important; grid-template-columns:8.6mm 9.4mm 1fr auto!important;}
+    .pl .rb{width:8.2mm!important; height:6.6mm!important; font-size:.78rem!important;}
+    .pl img{width:9.4mm!important; height:11.2mm!important;}
+    .pl-m b{font-size:.83rem!important;}
+    .pl-m span{font-size:.67rem!important;}
+    .pl-v b{font-size:.95rem!important;}
+    .pl-v span{font-size:.65rem!important;}
+    .rk-plist{row-gap:.75mm!important;}
+    body.rk-mode .cr-wa{display:none!important;}
+    body.rk-mode footer .cr{display:none!important;}
+    body.rk-mode .rk-end .credit{font-size:.8rem!important; line-height:1.4;}
+    body.rk-mode footer .dis{text-align:center; margin-top:2mm!important; font-size:.78rem!important; line-height:1.4!important; padding:7px 12px!important;}
+    body.rk-mode footer .dis b{display:inline!important; margin:0 4px 0 0!important; font-size:.8rem!important;}
+    body.rk-mode footer .dis b::after{content:':';}
+    body.rk-mode footer{padding-bottom:0!important; margin-top:2mm!important;}
+    body.rk-mode .rk-end{margin-top:1.5mm!important;}
+  }
+
+  /* Four buttons do not fit one row on a phone: wrap into two rows of two. */
+  @media(max-width:600px){
+    .rk-end .toolbar{flex-wrap:wrap;}
+    .rk-end .toolbar button{flex:1 1 45%;}
+  }
+  /* Print in Arial on every platform. The screen font stack resolves to Segoe UI on
+     Windows, whose line boxes are about 19 percent taller than Arial's, which pushed the
+     ranking onto a third page there. Arial has the same metrics everywhere, so the page
+     counts verified at build time hold on the user's machine. A little headroom is
+     taken out of the ranking spacing as well. */
+  @media print{
+    body{font-family:Arial,"Liberation Sans",Helvetica,sans-serif!important;}
+    #rankView .podium{padding:4mm 5mm 3.5mm!important;}
+    #rankView .pd{padding:3.5mm 2.5mm!important;}
+    #rankView .pd.p1{padding:4.5mm 2.5mm!important;}
+    #rankView .st{padding:2.5mm 4mm!important;}
+    #rankView .bands{padding:2.5mm 4mm!important;}
+    #rankView .rk-hero{padding:2.5mm 5mm!important; margin-top:3mm!important;}
+    .rk-plist{row-gap:.6mm!important;}
+    .pl{padding:.3mm 2.6mm .3mm 1.8mm!important;}
+  }
 </style>
 </head>
 <body>
@@ -844,6 +924,8 @@
         <div class="credit">Compiled and built by Md. Sohel Rana &nbsp;&bull;&nbsp; <span class="cr-wa">WhatsApp: <a href="https://wa.me/8801722308080" target="_blank" rel="noopener">@sohelprsnl</a> &nbsp;&bull;&nbsp; </span>Portfolio: <a href="https://sohelprsnl.com" target="_blank" rel="noopener">sohelprsnl.com</a> &nbsp;&bull;&nbsp; PGD-GB Archive: <a href="https://sohelprsnl.com/pgd-gb-archive/" target="_blank" rel="noopener">sohelprsnl.com/pgd-gb-archive</a></div>
         <div class="toolbar">
           <button class="sec" type="button" id="rkBack2">Back to Result Checker</button>
+          <button class="sec" type="button" onclick="rkSaveJPG(1,this)">Page 1 as JPG</button>
+          <button class="sec" type="button" onclick="rkSaveJPG(2,this)">Page 2 as JPG</button>
           <button type="button" id="rkPrint">Print / Save PDF</button>
         </div>
       </div>
@@ -1293,7 +1375,9 @@ function jpgRender(st, photo, S, g, fitA4){
 }
 
 function jpgDraw(st, photo, btn, old){
-  var SCALES = [2.7, 1.9, 1.3];
+  /* 3840/1240: the image is 3840 px wide, 4K, and 5431 px tall at A4 shape.
+     Smaller scales are fallbacks for a device that cannot allocate that canvas. */
+  var SCALES = [3840/1240, 2.7, 1.9, 1.3];
   var name = 'PGD-GB-Marksheet-' + st.roll + '.jpg';
   function finish(){ if(btn){ btn.disabled = false; btn.textContent = old; } }
   function send(href, revoke){
@@ -1325,6 +1409,362 @@ function jpgDraw(st, photo, btn, old){
     }
   }
   attempt(0);
+}
+
+
+/* ---- Ranking: Save as JPG, one image per printed page -------------------
+   Same approach as the marksheet export: drawn by hand on a canvas in a 1240-unit
+   A4 space, painted at scale S, so it needs no library and looks the same everywhere. */
+function rkLoadPhotos(list){
+  return Promise.all(list.map(function(s){
+    return new Promise(function(res){
+      var im = new Image();
+      im.onload = function(){ res(im); }; im.onerror = function(){ res(null); };
+      im.src = s.photo || NOPHOTO;
+    });
+  }));
+}
+
+function rkJpgEnv(x, S){
+  var cs = getComputedStyle(document.documentElement);
+  function V(n, d){ var v = (cs.getPropertyValue(n)||'').trim(); return v || d; }
+  var TS = 1.4, FAM = "px 'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+  var E = {
+    TS: TS, W: 1240, A4H: 1240*1.4142136, M: 36,
+    GREEN: V('--green','#14683c'), GREEN2: V('--green2','#1e8a4f'), LIGHT: V('--light','#eaf5ed'),
+    BORD: V('--border','#d9e2dc'), MUTE: V('--muted','#6b7280'), TEXT: '#1a1a1a',
+    gold: V('--gold','#9a6b00'), goldbg: V('--goldbg','#fdf7e4'), goldbd: V('--goldbd','#e2c15a'),
+    silver: V('--silver','#56606e'), silverbg: V('--silverbg','#f3f5f8'), silverbd: V('--silverbd','#bcc3cd'),
+    bronze: V('--bronze','#8c4f22'), bronzebg: V('--bronzebg','#fbf0e7'), bronzebd: V('--bronzebd','#d8a47a'),
+    F: function(sz, w){ return (w ? w+' ' : '') + (Math.round(sz*TS*10)/10) + FAM; },
+    T: function(t, px, py, f, col, align){
+      x.font = f; x.fillStyle = col; x.textAlign = align || 'left';
+      x.fillText(String(t), px, py); x.textAlign = 'left';
+    },
+    TF: function(t, px, py, sz, w, col, align, maxw){
+      var s = sz*TS;
+      for(;;){
+        x.font = (w ? w+' ' : '') + (Math.round(s*10)/10) + FAM;
+        if(x.measureText(t).width <= maxw || s <= 9) break;
+        s -= 0.5;
+      }
+      x.fillStyle = col; x.textAlign = align || 'left';
+      x.fillText(String(t), px, py); x.textAlign = 'left';
+      return s;
+    },
+    wrap: function(t, f, maxw){
+      x.font = f;
+      var words = String(t).split(' '), line = '', out = [];
+      for(var i=0;i<words.length;i++){
+        var test = line ? line+' '+words[i] : words[i];
+        if(x.measureText(test).width > maxw && line){ out.push(line); line = words[i]; }
+        else line = test;
+      }
+      out.push(line); return out;
+    },
+    photo: function(im, px, py, w, h, r, border){
+      if(im){
+        x.save(); jpgRR(x, px, py, w, h, r); x.clip();
+        var ar = im.width/im.height, box = w/h, sw, sh, sx, sy;
+        if(ar > box){ sh = im.height; sw = sh*box; sx = (im.width-sw)/2; sy = 0; }
+        else { sw = im.width; sh = sw/box; sx = 0; sy = (im.height-sh)/2; }
+        x.drawImage(im, sx, sy, sw, sh, px, py, w, h); x.restore();
+      } else { x.fillStyle = '#eef1ef'; jpgRR(x, px, py, w, h, r); x.fill(); }
+      if(border){ x.strokeStyle = border; x.lineWidth = 2; jpgRR(x, px, py, w, h, r); x.stroke(); }
+    },
+    letterhead: function(y){
+      var W = E.W, CW = W - E.M*2;
+      y += 34*TS;
+      E.TF('Institute of Business Administration, University of Dhaka', W/2, y, 33, 'bold', E.GREEN, 'center', CW-60);
+      y += 32*TS;
+      E.TF('Skills for Industry Competitiveness and Innovation Program (SICIP)', W/2, y, 22, '', '#555', 'center', CW);
+      y += 18;
+      x.fillStyle = E.GREEN; x.fillRect(E.M, y, CW, 3.5);
+      return y + 30;
+    },
+    cardTop: function(y, title, right){
+      var h = 58*TS, CW = E.W - E.M*2;
+      x.fillStyle = E.LIGHT; jpgRR(x, E.M, y, CW, h, 10); x.fill();
+      x.fillStyle = E.LIGHT; x.fillRect(E.M, y+h-12, CW, 12);
+      E.T(title, E.M+20, y + h*0.66, E.F(22,'bold'), E.GREEN);
+      if(right) E.T(right, E.M+CW-20, y + h*0.66, E.F(15), E.MUTE, 'right');
+      x.strokeStyle = E.BORD; x.lineWidth = 1; x.beginPath(); x.moveTo(E.M, y+h+.5); x.lineTo(E.M+CW, y+h+.5); x.stroke();
+      return y + h;
+    },
+    cardFrame: function(top, bottom){
+      x.strokeStyle = E.BORD; x.lineWidth = 1.5; jpgRR(x, E.M+.75, top+.75, E.W-E.M*2-1.5, bottom-top-1.5, 10); x.stroke();
+    },
+    tail: function(y, g){
+      /* credit and disclaimer, as on the marksheet image */
+      var W = E.W, CW = W - E.M*2;
+      y += g;
+      E.T('Compiled and built by Md. Sohel Rana', W/2, y+18*TS, E.F(19), E.MUTE, 'center');
+      E.T('Portfolio: sohelprsnl.com   •   PGD-GB Archive: sohelprsnl.com/pgd-gb-archive',
+          W/2, y+18*TS + 26*TS, E.F(19), E.MUTE, 'center');
+      y += 32*TS + 26*TS + g;
+      var l1a = 'Disclaimer: ', l1b = 'This is an unofficial student-made website and is not affiliated with or maintained by IBA-DU or SICIP.';
+      var l2  = 'In the event of any discrepancy, the official records of the IBA Programme Office shall prevail.';
+      var dsz = 19, w1a, w1b, w2;
+      for(;;){
+        x.font = E.F(dsz,'bold'); w1a = x.measureText(l1a).width;
+        x.font = E.F(dsz);        w1b = x.measureText(l1b).width; w2 = x.measureText(l2).width;
+        if(Math.max(w1a + w1b, w2) <= CW - 40 || dsz <= 11) break;
+        dsz -= 0.25;
+      }
+      var dw = Math.max(w1a + w1b, w2), lineH = (dsz + 7.5)*TS, bh = 16 + lineH*2 + 10;
+      var bw = Math.min(CW, dw + 40), bx = W/2 - bw/2;
+      x.fillStyle = '#fffaf2'; jpgRR(x, bx, y, bw, bh, 8); x.fill();
+      x.strokeStyle = '#efd6a8'; x.lineWidth = 1.2; jpgRR(x, bx, y, bw, bh, 8); x.stroke();
+      x.fillStyle = '#e8a33d'; x.fillRect(bx, y+8, 4, bh-16);
+      var l1x = W/2 - (w1a + w1b)/2, b1 = y + 16 + lineH - 6;
+      E.T(l1a, l1x, b1, E.F(dsz,'bold'), '#8a4b00');
+      E.T(l1b, l1x + w1a, b1, E.F(dsz), '#6b6b6b');
+      E.T(l2, W/2, b1 + lineH, E.F(dsz), '#6b6b6b', 'center');
+      return y + bh;
+    }
+  };
+  return E;
+}
+
+/* page 1: hero, podium, summary */
+function rkRender1(R, photos, S, g, fitA4){
+  g = g || 0;
+  var HMAX = 2600, c = document.createElement('canvas');
+  c.width = Math.round(1240*S); c.height = Math.round(HMAX*S);
+  var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height);
+  x.setTransform(S,0,0,S,0,0); x.textBaseline = 'alphabetic';
+  var E = rkJpgEnv(x, S), TS = E.TS, W = E.W, M = E.M, CW = W - M*2, F = E.F, T = E.T;
+
+  var y = E.letterhead(30 + g) + g;
+
+  /* hero */
+  var top = y, pad = 24;
+  y += pad + 30*TS;
+  T('Result Ranking', M+pad, y, F(30,'bold'), E.GREEN);
+  y += 26*TS;
+  T('SICIP-B11/2025   •   Ranked by Average CGPA, then by Total Marks', M+pad, y, F(18), E.MUTE);
+  var note = ($('rkNote2') && !$('rkNote2').hidden) ? $('rkNote2').textContent : '';
+  if(note){ y += 24*TS; E.TF(note, M+pad, y, 15, '', E.MUTE, 'left', CW - pad*2); }
+  y += pad;
+  x.save(); jpgRR(x, M, top, CW, y-top, 10); x.clip(); x.fillStyle = E.GREEN2; x.fillRect(M, top, CW, 6); x.restore();
+  E.cardFrame(top, y);
+  y += 18 + g;
+
+  /* podium card */
+  top = y;
+  y = E.cardTop(y, 'Top Ranked Students', 'Highest Average CGPA');
+  var ppad = 26, gap = 22, colW = (CW - ppad*2 - gap*2)/3;
+  var order = [1,0,2], ranked = R.ranked.slice(0,3);
+  var ph = [ [250, 300], [208, 250], [208, 250] ];            /* photo sizes by rank index */
+  var cardH = [ 640, 580, 580 ];
+  var py0 = y + ppad, maxBottom = py0;
+  order.forEach(function(ri, col){
+    var s = ranked[ri]; if(!s) return;
+    var cx = M + ppad + col*(colW + gap), h = cardH[ri], cy = py0 + (cardH[0] - h);
+    var bg = [E.goldbg, E.silverbg, E.bronzebg][ri], bd = [E.goldbd, E.silverbd, E.bronzebd][ri];
+    var col1 = [E.gold, E.silver, E.bronze][ri], medal = ['#c9a227','#98a1ad','#b87a4b'][ri];
+    x.fillStyle = bg; jpgRR(x, cx, cy, colW, h, 14); x.fill();
+    x.strokeStyle = bd; x.lineWidth = 1.5; jpgRR(x, cx, cy, colW, h, 14); x.stroke();
+    var yy = cy + 26, mr = (ri===0 ? 30 : 26);
+    x.fillStyle = medal; x.beginPath(); x.arc(cx+colW/2, yy+mr, mr, 0, Math.PI*2); x.fill();
+    T(ORD(ri+1), cx+colW/2, yy+mr+6*TS, F(ri===0 ? 13 : 12,'bold'), '#fff', 'center');
+    yy += mr*2 + 18;
+    var pw = ph[ri][0], phh = ph[ri][1];
+    E.photo(photos[ri], cx + colW/2 - pw/2, yy, pw, phh, 10, bd);
+    yy += phh + 20 + 20*TS;
+    E.TF(s.name, cx+colW/2, yy, ri===0 ? 22 : 20, 'bold', E.TEXT, 'center', colW - 24);
+    yy += 20*TS;
+    T('Roll '+s.roll, cx+colW/2, yy, F(14), E.MUTE, 'center');
+    yy += 16 + 14*TS;
+    var pill = (s.hasTotal ? fT(s.total) : '—'), pill2 = ' total marks';
+    x.font = F(14,'bold'); var pw1 = x.measureText(pill).width; x.font = F(14); var pw2 = x.measureText(pill2).width;
+    var pwT = pw1 + pw2 + 30, pH = 24*TS;
+    x.fillStyle = '#fff'; jpgRR(x, cx+colW/2-pwT/2, yy-pH*0.72, pwT, pH, pH/2); x.fill();
+    x.strokeStyle = E.BORD; x.lineWidth = 1; jpgRR(x, cx+colW/2-pwT/2, yy-pH*0.72, pwT, pH, pH/2); x.stroke();
+    T(pill, cx+colW/2-pwT/2+15, yy, F(14,'bold'), E.TEXT);
+    T(pill2, cx+colW/2-pwT/2+15+pw1, yy, F(14), E.TEXT);
+    yy += pH*0.4 + 34*TS;
+    T(f2(s.shown), cx+colW/2, yy, F(ri===0 ? 40 : 32,'bold'), col1, 'center');
+    yy += 16*TS;
+    T('AVERAGE CGPA', cx+colW/2, yy, F(11), E.MUTE, 'center');
+    maxBottom = Math.max(maxBottom, cy + h);
+  });
+  y = maxBottom + ppad;
+  E.cardFrame(top, y);
+  y += 18 + g;
+
+  /* summary card */
+  top = y;
+  y = E.cardTop(y, 'Overall Ranking Summary', ($('rkSumNote') ? $('rkSumNote').textContent : ''));
+  var tiles = [].slice.call(document.querySelectorAll('#rkStats .st')).map(function(el){
+    var b = el.querySelector('b');
+    return { label: (el.querySelector('span')||{}).textContent||'', val: b ? b.textContent : '',
+             isName: !!(b && b.classList.contains('nm')), sub: (el.querySelector('em')||{}).textContent||'' };
+  });
+  var cols = 4, tileW = CW/cols, tileH = 112;
+  tiles.forEach(function(t, i){
+    var r = Math.floor(i/cols), cI = i%cols, span = (i===tiles.length-1 && cI===cols-2) ? 1 : 1;
+    var tx = M + cI*tileW, ty = y + r*tileH;
+    var spans = (i === tiles.length-1 && cI === cols-2) ? 2 : 1;
+    x.strokeStyle = E.BORD; x.lineWidth = 1;
+    if(cI>0){ x.beginPath(); x.moveTo(tx+.5, ty); x.lineTo(tx+.5, ty+tileH); x.stroke(); }
+    if(r>0 && cI===0){ x.beginPath(); x.moveTo(M, ty+.5); x.lineTo(M+CW, ty+.5); x.stroke(); }
+    T(t.label.toUpperCase(), tx+16, ty+22*TS, F(11,'bold'), E.MUTE);
+    E.TF(t.val, tx+16, ty+22*TS + (t.isName ? 24 : 28)*TS, t.isName ? 19 : 26, 'bold', E.TEXT, 'left', tileW*spans-32);
+    if(t.sub) E.TF(t.sub, tx+16, ty+tileH-14, 13, '', E.MUTE, 'left', tileW*spans-32);
+  });
+  y += Math.ceil(tiles.length/cols)*tileH;
+  x.strokeStyle = E.BORD; x.beginPath(); x.moveTo(M, y+.5); x.lineTo(M+CW, y+.5); x.stroke();
+
+  /* bands */
+  var bands = [0,0,0];
+  R.ranked.forEach(function(s){ var v = r2(s.shown); bands[v>=3.5 ? 0 : v>=3 ? 1 : 2]++; });
+  var bcol = ['#1b6b3a','#6fa882','#c9d8cc'], blab = ['3.50 and above','3.00 to 3.49','Below 3.00'];
+  var dom = document.querySelectorAll('#rkBands .bbar i');
+  if(dom.length === 3) for(var k=0;k<3;k++){ var cc = getComputedStyle(dom[k]).backgroundColor; if(cc && cc !== 'rgba(0, 0, 0, 0)') bcol[k] = cc; }
+  y += 22;
+  T('CGPA SPREAD', M+16, y+10*TS, F(11,'bold'), E.MUTE);
+  y += 14*TS + 10;
+  var bx0 = M+16, bw0 = CW-32, bh0 = 20, n = R.ranked.length || 1, bxx = bx0;
+  x.fillStyle = '#f3f5f3'; jpgRR(x, bx0, y, bw0, bh0, 5); x.fill();
+  x.save(); jpgRR(x, bx0, y, bw0, bh0, 5); x.clip();
+  bands.forEach(function(cnt, k){ var w = bw0*cnt/n; x.fillStyle = bcol[k]; x.fillRect(bxx, y, Math.max(0, w-2), bh0); bxx += w; });
+  x.restore();
+  y += bh0 + 14 + 12*TS;
+  var lx = bx0;
+  bands.forEach(function(cnt, k){
+    x.fillStyle = bcol[k]; jpgRR(x, lx, y-11*TS, 12, 12, 3); x.fill(); lx += 20;
+    T(blab[k], lx, y, F(13), E.TEXT); x.font = F(13); lx += x.measureText(blab[k]).width + 8;
+    T(cnt, lx, y, F(13,'bold'), E.TEXT); x.font = F(13,'bold'); lx += x.measureText(String(cnt)).width + 34;
+  });
+  y += 20;
+  x.strokeStyle = E.BORD; x.beginPath(); x.moveTo(M, y+.5); x.lineTo(M+CW, y+.5); x.stroke();
+
+  /* method */
+  var mtxt = $('rkMethodP') ? $('rkMethodP').textContent : '';
+  x.fillStyle = '#f4f9f5'; x.fillRect(M, y+1, CW, 1);   /* placeholder, box drawn after measuring */
+  var ml = E.wrap(mtxt, F(13), CW - 32 - 70), mh = 18 + ml.length*(13*TS+6) + 12;
+  x.fillStyle = '#f4f9f5'; x.fillRect(M+1, y+1, CW-2, mh);
+  T('Method', M+16, y+18+13*TS-2, F(13,'bold'), E.GREEN);
+  ml.forEach(function(l, i){ T(l, M+16+70, y+18+13*TS-2 + i*(13*TS+6), F(13), '#555'); });
+  y += mh;
+  E.cardFrame(top, y);
+  y += M;
+
+  var contentY = y;
+  var endY = Math.min(HMAX, Math.round(fitA4 ? E.A4H : y));
+  var out = document.createElement('canvas');
+  out.width = Math.round(1240*S); out.height = Math.round(endY*S);
+  var ox = out.getContext('2d'); ox.fillStyle = '#fff'; ox.fillRect(0,0,out.width,out.height); ox.drawImage(c,0,0);
+  out.__endY = contentY;
+  return out;
+}
+
+/* page 2: full list in two columns */
+function rkRender2(R, photos, S){
+  var c = document.createElement('canvas');
+  var E0 = { A4H: 1240*1.4142136 };
+  c.width = Math.round(1240*S); c.height = Math.round(E0.A4H*S);
+  var x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0,0,c.width,c.height);
+  x.setTransform(S,0,0,S,0,0); x.textBaseline = 'alphabetic';
+  var E = rkJpgEnv(x, S), TS = E.TS, W = E.W, M = E.M, CW = W - M*2, F = E.F, T = E.T;
+
+  var y = E.letterhead(30);
+
+  /* header bar */
+  var hh = 54*TS;
+  x.fillStyle = E.LIGHT; jpgRR(x, M, y, CW, hh, 10); x.fill();
+  x.strokeStyle = E.BORD; x.lineWidth = 1; jpgRR(x, M+.5, y+.5, CW-1, hh-1, 10); x.stroke();
+  T('Full Ranking   •   PGD-GB SICIP-B11/2025', M+20, y+hh*0.65, F(21,'bold'), E.GREEN);
+  var d = new Date();
+  T('Printed ' + d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'numeric'}), M+CW-20, y+hh*0.65, F(14), E.MUTE, 'right');
+  y += hh + 16;
+
+  /* measure the tail so the list can take exactly what is left */
+  var probe = document.createElement('canvas').getContext('2d');
+  var tailH = (function(){
+    var pc = document.createElement('canvas'); pc.width = 10; pc.height = 10;
+    var px = pc.getContext('2d'); var PE = rkJpgEnv(px, 1);
+    return PE.tail(0, 0);
+  })();
+  var list = R.ranked.concat(R.excluded), n = list.length, rows = Math.ceil(n/2);
+  var gapY = 9, gapX = 18, colW = (CW - gapX)/2;
+  var avail = E0.A4H - y - tailH - 22 - M;
+  var rowH = Math.min(96, Math.floor((avail - gapY*(rows-1))/rows));
+
+  list.forEach(function(s, i){
+    var col = i < rows ? 0 : 1, r = i < rows ? i : i - rows;
+    var rx = M + col*(colW + gapX), ry = y + r*(rowH + gapY);
+    var rk = s.rank || 0;
+    var bg = rk===1 ? E.goldbg : rk===2 ? E.silverbg : rk===3 ? E.bronzebg : '#fff';
+    var bd = rk===1 ? E.goldbd : rk===2 ? E.silverbd : rk===3 ? E.bronzebd : E.BORD;
+    x.fillStyle = bg; jpgRR(x, rx, ry, colW, rowH, 9); x.fill();
+    x.strokeStyle = bd; x.lineWidth = 1.2; jpgRR(x, rx, ry, colW, rowH, 9); x.stroke();
+    /* rank badge */
+    var bw = 46, bh = rowH*0.52, bx = rx+12, by = ry + (rowH-bh)/2;
+    var medal = rk===1 ? '#c9a227' : rk===2 ? '#98a1ad' : rk===3 ? '#b87a4b' : null;
+    x.fillStyle = medal || '#fff'; jpgRR(x, bx, by, bw, bh, bh/2); x.fill();
+    if(!medal){ x.strokeStyle = E.GREEN2; x.lineWidth = 1.5; jpgRR(x, bx, by, bw, bh, bh/2); x.stroke(); }
+    T(rk || '—', bx+bw/2, by+bh/2+5*TS, F(13,'bold'), medal ? '#fff' : E.GREEN, 'center');
+    /* photo */
+    var pH = rowH - 14, pW = Math.round(pH*0.84), px0 = bx + bw + 12, py0 = ry + 7;
+    E.photo(photos[i], px0, py0, pW, pH, 6, E.BORD);
+    /* name, roll */
+    var tx = px0 + pW + 14, valW = 150, maxw = rx + colW - 14 - valW - tx;
+    x.font = F(17,'bold');
+    if(x.measureText(s.name).width <= maxw){
+      T(s.name, tx, ry + rowH*0.46, F(17,'bold'), E.TEXT);
+      T('Roll '+s.roll, tx, ry + rowH*0.46 + 15*TS, F(12), E.MUTE);
+    } else {
+      var nl = E.wrap(s.name, F(14.5,'bold'), maxw).slice(0,2);
+      nl.forEach(function(l, k){ E.TF(l, tx, ry + rowH*0.34 + k*15*TS, 14.5, 'bold', E.TEXT, 'left', maxw); });
+      T('Roll '+s.roll, tx, ry + rowH*0.34 + 2*15*TS - 2, F(11.5), E.MUTE);
+    }
+    /* values */
+    T(rk ? f2(s.shown) : '—', rx+colW-14, ry + rowH*0.46, F(19,'bold'), E.TEXT, 'right');
+    T((s.hasTotal ? fT(s.total) : '—') + ' marks', rx+colW-14, ry + rowH*0.46 + 15*TS, F(11.5), E.MUTE, 'right');
+  });
+  y += rows*rowH + (rows-1)*gapY + 22;
+  x.strokeStyle = '#bdbdbd'; x.setLineDash([4,4]); x.beginPath(); x.moveTo(M, y); x.lineTo(M+CW, y); x.stroke(); x.setLineDash([]);
+  E.tail(y, 0);
+  return c;
+}
+
+function rkSaveJPG(page, btn){
+  var R = (typeof RK !== 'undefined') ? RK : null;
+  if(!R || !R.ranked || !R.ranked.length) return;
+  var old = btn ? btn.textContent : '';
+  if(btn){ btn.disabled = true; btn.textContent = 'Preparing…'; }
+  var S = 2.7, name = 'PGD-GB-Ranking-page' + page + '.jpg';
+  function finish(){ if(btn){ btn.disabled = false; btn.textContent = old; } }
+  function send(href, revoke){
+    var a = document.createElement('a'); a.href = href; a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    if(revoke) setTimeout(function(){ URL.revokeObjectURL(href); }, 4000);
+    finish();
+  }
+  var list = page === 1 ? R.ranked.slice(0,3) : R.ranked.concat(R.excluded);
+  rkLoadPhotos(list).then(function(photos){
+    var tries = [3840/1240, 2.7, 1.9, 1.3];
+    function attempt(i){
+      if(i >= tries.length){ finish(); return; }
+      var out;
+      try{
+        if(page === 1){
+          var probe = rkRender1(R, photos, 0.3, 0, false);
+          var slack = 1240*1.4142136 - probe.__endY;
+          var gap = slack > 0 ? Math.min(slack/5, 60) : 0;
+          out = rkRender1(R, photos, tries[i], gap, slack > 0);
+        } else out = rkRender2(R, photos, tries[i]);
+      }catch(e){ attempt(i+1); return; }
+      try{
+        out.toBlob(function(blob){ if(!blob){ attempt(i+1); return; } send(URL.createObjectURL(blob), true); }, 'image/jpeg', 0.92);
+      }catch(e2){
+        try{ send(out.toDataURL('image/jpeg', 0.92), false); }catch(e3){ attempt(i+1); }
+      }
+    }
+    attempt(0);
+  });
 }
 
 function reset_(){
